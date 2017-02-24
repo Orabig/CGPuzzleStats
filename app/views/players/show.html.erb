@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Cgid:</strong>
+  <%= @player.cgid %>
+</p>
+
+<p>
+  <strong>Pseudo:</strong>
+  <%= @player.pseudo %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @player.level %>
+</p>
+
+<%= link_to 'Edit', edit_player_path(@player) %> |
+<%= link_to 'Back', players_path %>

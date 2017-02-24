@@ -1,0 +1,62 @@
+<%= form_for(puzzle) do |f| %>
+  <% if puzzle.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(puzzle.errors.count, "error") %> prohibited this puzzle from being saved:</h2>
+
+      <ul>
+      <% puzzle.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :cgid %>
+    <%= f.number_field :cgid %>
+  </div>
+
+  <div class="field">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :description %>
+    <%= f.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= f.label :detailsPageUrl %>
+    <%= f.text_field :detailsPageUrl %>
+  </div>
+
+  <div class="field">
+    <%= f.label :level %>
+    <%= f.text_field :level %>
+  </div>
+
+  <div class="field">
+    <%= f.label :prettyId %>
+    <%= f.text_field :prettyId %>
+  </div>
+
+  <div class="field">
+    <%= f.label :solvedCount %>
+    <%= f.number_field :solvedCount %>
+  </div>
+
+  <div class="field">
+    <%= f.label :type %>
+    <%= f.text_field :type %>
+  </div>
+
+  <div class="field">
+    <%= f.label :achievementCount %>
+    <%= f.number_field :achievementCount %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

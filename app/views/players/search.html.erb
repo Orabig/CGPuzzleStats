@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Search result</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>CGID</th>
+      <th>Country</th>
+      <th>Rank</th>
+      <th>Level</th>
+      <th>Pseudo</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @players.each do |player| %>
+      <tr>
+        <td><%= player["codingamer"]["userId"] %></td>
+        <td><%= player["codingamer"]["countryId"] %></td>
+        <td>#<%= player["rank"] %></td>
+        <td><%= player["codingamer"]["level"] %></td>
+        <td><%= player["pseudo"] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Player', new_player_path %>

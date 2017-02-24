@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Cgid:</strong>
+  <%= @puzzle.cgid %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @puzzle.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @puzzle.description %>
+</p>
+
+<p>
+  <strong>Detailspageurl:</strong>
+  <%= @puzzle.detailsPageUrl %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @puzzle.level %>
+</p>
+
+<p>
+  <strong>Prettyid:</strong>
+  <%= @puzzle.prettyId %>
+</p>
+
+<p>
+  <strong>Solvedcount:</strong>
+  <%= @puzzle.solvedCount %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @puzzle.type %>
+</p>
+
+<p>
+  <strong>Achievementcount:</strong>
+  <%= @puzzle.achievementCount %>
+</p>
+
+<%= link_to 'Edit', edit_puzzle_path(@puzzle) %> |
+<%= link_to 'Back', puzzles_path %>

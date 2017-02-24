@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cgid: 1
+  title: MyString
+  description: MyString
+  detailsPageUrl: MyString
+  level: MyString
+  prettyId: MyString
+  solvedCount: 1
+  type: 
+  achievementCount: 1
+
+two:
+  cgid: 1
+  title: MyString
+  description: MyString
+  detailsPageUrl: MyString
+  level: MyString
+  prettyId: MyString
+  solvedCount: 1
+  type: 
+  achievementCount: 1

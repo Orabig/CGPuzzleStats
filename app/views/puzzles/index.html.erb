@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Puzzles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Cgid</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Detailspageurl</th>
+      <th>Level</th>
+      <th>Prettyid</th>
+      <th>Solvedcount</th>
+      <th>Type</th>
+      <th>Achievementcount</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @puzzles.each do |puzzle| %>
+      <tr>
+        <td><%= puzzle.cgid %></td>
+        <td><%= puzzle.title %></td>
+        <td><%= puzzle.description %></td>
+        <td><%= puzzle.detailsPageUrl %></td>
+        <td><%= puzzle.level %></td>
+        <td><%= puzzle.prettyId %></td>
+        <td><%= puzzle.solvedCount %></td>
+        <td><%= puzzle.type %></td>
+        <td><%= puzzle.achievementCount %></td>
+        <td><%= link_to 'Show', puzzle %></td>
+        <td><%= link_to 'Edit', edit_puzzle_path(puzzle) %></td>
+        <td><%= link_to 'Destroy', puzzle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Puzzle', new_puzzle_path %>

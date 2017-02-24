@@ -1,7 +1,6 @@
 version: '2'
+
 services:
-  db:
-    image: postgres
   web:
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
@@ -11,3 +10,11 @@ services:
       - "3333:3000"
     depends_on:
       - db
+
+  db:
+    image: postgres
+    volumes:
+      - postgres-db-volume:/data/postgres
+
+volumes:
+  postgres-db-volume:
