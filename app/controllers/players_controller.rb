@@ -21,10 +21,10 @@ class PlayersController < ApplicationController
   def edit
   end
   
-  # GET /players/xxx/search
+  # GET /search
   def search
-    name = params[:name]
-	request = '[1,{"keyword":"' + name + '"},"",true,"global"]'
+    query = params[:query]
+	request = '[1,{"keyword":"' + query + '"},"",true,"global"]'
 	response = HTTParty.post('https://www.codingame.com/services/LeaderboardsRemoteService/getGlobalLeaderboard',:body => request)
 	if response.message=="OK"
 		 result = JSON.parse( response.body )
@@ -64,6 +64,20 @@ class PlayersController < ApplicationController
     end
   end
 
+  # PATCH/PUT /players/save
+  def save
+	@player = Player.new
+    respond_to do |format|
+      if @player.update(save_player_params)
+        format.html { redirect_to @player, notice: 'Player was successfully updated.' }
+        format.json { render :show, status: :ok, location: @player }
+      else
+        format.html { render :edit }
+        format.json { render json: @player.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /players/1
   # DELETE /players/1.json
   def destroy
@@ -82,6 +96,9 @@ class PlayersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def player_params
-      params.require(:player).permit(:cgid, :pseudo, :level)
+      params.require(:player).permit(:cgid, :pseudo, :rank, :level)
+    end
+    def save_player_params
+      params.permit(:cgid, :pseudo, :rank, :level)
     end
 end

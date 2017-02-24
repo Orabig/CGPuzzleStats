@@ -10,6 +10,7 @@
       <th>Rank</th>
       <th>Level</th>
       <th>Pseudo</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -21,6 +22,11 @@
         <td>#<%= player["rank"] %></td>
         <td><%= player["codingamer"]["level"] %></td>
         <td><%= player["pseudo"] %></td>
+        <td><%= link_to "Save", save_players_url(
+			cgid: player["codingamer"]["userId"], 
+			rank: player["rank"],
+			level: player["codingamer"]["level"],
+			pseudo: player["pseudo"]) %></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +34,4 @@
 
 <br>
 
-<%= link_to 'New Player', new_player_path %>
+<%= link_to 'Back', players_path %>
