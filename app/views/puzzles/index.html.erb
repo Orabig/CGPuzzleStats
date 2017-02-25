@@ -7,8 +7,6 @@
     <tr>
       <th>Cgid</th>
       <th>Title</th>
-      <th>Description</th>
-      <th>Detailspageurl</th>
       <th>Level</th>
       <th>Prettyid</th>
       <th>Solvedcount</th>
@@ -22,13 +20,11 @@
     <% @puzzles.each do |puzzle| %>
       <tr>
         <td><%= puzzle.cgid %></td>
-        <td><%= puzzle.title %></td>
-        <td><%= puzzle.description %></td>
-        <td><%= puzzle.detailsPageUrl %></td>
+        <td><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>"><%= puzzle.title %></a></td>
         <td><%= puzzle.level %></td>
         <td><%= puzzle.prettyId %></td>
         <td><%= puzzle.solvedCount %></td>
-        <td><%= puzzle.type %></td>
+        <td><%= puzzle.puzzleType %></td>
         <td><%= puzzle.achievementCount %></td>
         <td><%= link_to 'Show', puzzle %></td>
         <td><%= link_to 'Edit', edit_puzzle_path(puzzle) %></td>
@@ -40,4 +36,5 @@
 
 <br>
 
-<%= link_to 'New Puzzle', new_puzzle_path %>
+<%= link_to 'New Puzzle', new_puzzle_path %> <br>
+<%= link_to_if @puzzles.empty?, 'Seed puzzles', seed_puzzles_path %>

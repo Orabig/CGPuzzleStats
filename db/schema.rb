@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20170224203749) do
     t.string   "level"
     t.string   "prettyId"
     t.integer  "solvedCount"
-    t.string   "type"
+    t.string   "puzzleType"
     t.integer  "achievementCount"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false

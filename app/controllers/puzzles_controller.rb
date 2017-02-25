@@ -7,6 +7,26 @@ class PuzzlesController < ApplicationController
     @puzzles = Puzzle.all
   end
 
+  # GET /puzzles/seed
+  def seed
+    text = File.read(Rails.root.join('app','models','seed','findGamePuzzleProgress.json'))
+	json = JSON.parse(text)
+	json["success"].each do |p|
+	  new_puzzle = Puzzle.new
+	  new_puzzle.cgid=p["id"]
+	  new_puzzle.title=p["title"]
+	  new_puzzle.description=p["description"]
+	  new_puzzle.detailsPageUrl=p["detailsPageUrl"]
+	  new_puzzle.level=p["level"]
+	  new_puzzle.prettyId=p["prettyId"]
+	  new_puzzle.solvedCount=p["solvedCount"]
+	  new_puzzle.puzzleType=p["type"]
+	  new_puzzle.achievementCount=p["achievementCount"]
+	  new_puzzle.save
+	end
+	redirect_to puzzles_url
+  end
+
   # GET /puzzles/1
   # GET /puzzles/1.json
   def show

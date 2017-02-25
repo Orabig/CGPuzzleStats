@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :puzzles
+  resources :puzzles do
+    collection do
+	  get 'seed'
+	end
+  end
   resources :players do
     collection do
 	  get 'search'
