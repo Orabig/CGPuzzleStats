@@ -1,5 +1,5 @@
 class PuzzlesController < ApplicationController
-  before_action :set_puzzle, only: [:show, :edit, :update, :destroy]
+  before_action :set_puzzle, only: [:show, :edit, :update, :destroy, :import]
 
   # GET /puzzles
   # GET /puzzles.json
@@ -21,6 +21,7 @@ class PuzzlesController < ApplicationController
 	  new_puzzle.prettyId=p["prettyId"]
 	  new_puzzle.solvedCount=p["solvedCount"]
 	  new_puzzle.puzzleType=p["type"]
+	  new_puzzle.leaderboardId=p["puzzleLeaderboardId"]
 	  new_puzzle.achievementCount=p["achievementCount"]
 	  new_puzzle.save
 	end
@@ -39,6 +40,18 @@ class PuzzlesController < ApplicationController
 
   # GET /puzzles/1/edit
   def edit
+  end
+
+  # POST /puzzles/1/import
+  def import
+	api = CodingameApi.new
+	response = api.puzzle_leaderboard @puzzle
+	if response.message=="OK"
+		result = JSON.parse( response.body )
+		@test = result['success']['users']
+	else
+		@test = [ "CG API Error" ]
+	end
   end
 
   # POST /puzzles

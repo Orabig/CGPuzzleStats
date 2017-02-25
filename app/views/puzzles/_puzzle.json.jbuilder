@@ -1,2 +1,2 @@
-json.extract! puzzle, :id, :cgid, :title, :description, :detailsPageUrl, :level, :prettyId, :solvedCount, :puzzleType, :achievementCount, :created_at, :updated_at
+json.extract! puzzle, :id, :cgid, :title, :description, :detailsPageUrl, :level, :prettyId, :leaderboardId, :solvedCount, :puzzleType, :achievementCount, :created_at, :updated_at
 json.url puzzle_url(puzzle, format: :json)

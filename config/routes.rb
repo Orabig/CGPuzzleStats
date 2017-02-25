@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     collection do
 	  get 'seed'
 	end
+	member do
+	  post 'import'
+	end
   end
   resources :players do
     collection do
