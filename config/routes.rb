@@ -5,6 +5,7 @@ Rails.application.routes.draw do
 	end
 	member do
 	  post 'import'
+	  get 'results' # Temporaire : affiche le resultat pour tous les players connus 
 	end
   end
   resources :players do

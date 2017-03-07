@@ -1,10 +1,22 @@
 class PuzzlesController < ApplicationController
-  before_action :set_puzzle, only: [:show, :edit, :update, :destroy, :import]
+  before_action :set_puzzle, only: [:show, :edit, :update, :destroy, :import, :results]
 
   # GET /puzzles
   # GET /puzzles.json
   def index
-    @puzzles = Puzzle.all
+    @puzzles = Puzzle.all.without_community
+	if params[:level]
+	  @puzzles = @puzzles.by_level(params[:level])
+	end
+	if params[:pid]
+		@pids = params[:pid].split(',')
+		@results = Array.new
+		for pid in @pids
+			player = Player.find_by(cgid: pid)
+			@results.push( Result.where(player: player) )
+		end
+		@results = @results.flatten.group_by {|r| "#{r.player_id}:#{r.puzzle_id}:#{r.language_id}"}
+	end
   end
 
   # GET /puzzles/seed
@@ -40,6 +52,12 @@ class PuzzlesController < ApplicationController
 
   # GET /puzzles/1/edit
   def edit
+  end
+  
+  # GET /puzzles/1/results
+  def results
+	api = CodingameApi.new
+	@results = Player.all.map { |p| [p.pseudo , api.puzzle_player_langages(@puzzle,p)] }.to_h
   end
 
   # POST /puzzles/1/import

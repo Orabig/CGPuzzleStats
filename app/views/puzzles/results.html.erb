@@ -1,0 +1,27 @@
+<h1>Loaderboard Puzzle : '<%= @puzzle.title %>'</h1>
+
+<% @langs=@results.fetch(@results.keys.first).map{|r| r['id']} %>
+
+<table>
+
+	<tr>
+		<th>Pseudo</th>
+		<% @langs.each do |lang| %>
+			<th><%= lang %></th>
+		<% end %>
+	</tr>
+	
+<% @results.each_pair do |playerPseudo, results| %>
+	<tr>
+		<th><%= playerPseudo %></th>
+		<% i=0 %>
+		<% @langs.each do |lang| %>
+			<td><%= results[i]["solved"] ? "X" : "" %></td>
+			<% i=i+1 %>
+		<% end %>
+	</tr>
+<% end %>
+
+</table>
+<br>
+<%= link_to 'Back', puzzles_path %>

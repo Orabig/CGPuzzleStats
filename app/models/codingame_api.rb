@@ -13,6 +13,16 @@ class CodingameApi
   # Charge la liste des langages pour lesquels le joueur J a résolu le puzzle P
   def puzzle_player_langages (puzzle, player)
 	request = "[\"#{ puzzle.cgid }\",\"#{ player.cgid }\"]"
-    self.class.post '/PuzzleRemoteService/findAvailableProgrammingLanguages',:body => request
+    response = self.class.post '/PuzzleRemoteService/findAvailableProgrammingLanguages',:body => request
+	if response.message=="OK"
+		body = JSON.parse(response.body)
+		if body["success"]
+			body["success"]
+		else
+			body["error"]
+		end
+	else
+		response
+	end
   end
 end

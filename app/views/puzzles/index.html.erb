@@ -2,6 +2,8 @@
 
 <h1>Puzzles</h1>
 
+<pre>@pids=<%= @pids %></pre>
+<pre>@results=<%= @results %></pre>
 <table>
   <thead>
     <tr>
@@ -29,6 +31,7 @@
         <td><%= puzzle.puzzleType %></td>
         <td><%= puzzle.achievementCount %></td>
         <td><%= link_to 'Show', puzzle %></td>
+        <td><%= link_to 'Results', results_puzzle_path(puzzle) %></td>
         <td><%= link_to_unless puzzle.leaderboardId.nil?, 'Leaderboard', import_puzzle_path(puzzle.id), method: :post %></td>
         <td><%= link_to 'Edit', edit_puzzle_path(puzzle) %></td>
         <td><%= link_to 'Destroy', puzzle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
