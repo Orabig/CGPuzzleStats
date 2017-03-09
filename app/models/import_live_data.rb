@@ -9,13 +9,13 @@ class ImportLiveData
 		results = api.puzzle_player_langages(puzzle,player)
 		for result in results
 			if result['solved']
-				last = result['last']
-				onboarding = result['onboarding']
+				isLast = result['last']
+				isOnboarding = result['onboarding']
 				lang = Language.find_or_create_by name: result['id']
-				r = Result.find_or_create_by( language: lang, puzzle: puzzle, player: player )
-				r.last=last
-				r.onboarding=onboarding
-				r.save!
+				r = Result.find_or_create_by( language: lang, puzzle: puzzle, player: player )				
+				r.is_last=isLast
+				r.is_onboarding=isOnboarding
+				r.save
 			end
 		end
 	end

@@ -11,11 +11,18 @@ class PuzzlesController < ApplicationController
 	if params[:pid]
 		@pids = params[:pid].split(',')
 		@results = Array.new
+		@debug = Array.new
 		for pid in @pids
 			player = Player.find_by(cgid: pid)
-			@results.push( Result.where(player: player) )
+			# player n'est pas NIL, car le pid vient d'une recherche qui doit avoir sauvé le player en base
+			@debug.push (player)
+			@results.push( Result.where(player: player).joins(:puzzle).where("puzzles.level = ?", params[:level]) )
 		end
-		@results = @results.flatten.group_by {|r| "#{r.player_id}:#{r.puzzle_id}:#{r.language_id}"}
+		@solvedLangs = @results.flatten.map{|r| r.language_id}.uniq
+		@results = @results
+			.flatten
+			.group_by {|r| "#{r.player.cgid}:#{r.puzzle_id}:#{r.language_id}"}
+		@languages = Language.all.to_a.keep_if{|l| @solvedLangs.include?(l.id)}
 	end
   end
 

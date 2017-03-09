@@ -2,8 +2,59 @@
 
 <h1>Puzzles</h1>
 
+
+
+<%
+	if @pids
+%>
 <pre>@pids=<%= @pids %></pre>
 <pre>@results=<%= @results %></pre>
+<pre>@languages=<%= @languages %></pre>
+<pre>@solvedLangs=<%= @solvedLangs %></pre>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Title</th>
+	  <% for lang in @languages %>
+	  <th><%= lang.name %></th>
+	  <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% for puzzle in @puzzles %>
+      <tr>
+		<td>
+		  <%  # Partie gauche du tableau : liste des players (indicateurs)
+			 for pid in @pids
+		  %>
+			<%= pid %>
+		  <% end %>
+		</td>
+        <td><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>"><%= puzzle.title %></a></td>
+		  <% for lang in @languages %>
+		  <td>
+			  <% for pid in @pids 
+					key = "#{pid}:#{puzzle.id}:#{lang.id}"
+					if @results.key?( key )
+				%>
+				<%= pid %>
+				<%
+				    end   # if
+				 end # for pid
+			  %>
+		  </td>
+		  <% end # for lang
+		  %>
+	  </tr>
+	<% end %>
+  </tbody>
+</table>
+
+<%
+	else
+%>
 <table>
   <thead>
     <tr>
@@ -39,6 +90,9 @@
     <% end %>
   </tbody>
 </table>
+<%
+	end
+%>
 
 <br>
 

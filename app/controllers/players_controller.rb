@@ -64,7 +64,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /players/save
+  # GET /players/save
   def save
 	@player = Player.new
     respond_to do |format|
@@ -76,6 +76,14 @@ class PlayersController < ApplicationController
         format.json { render json: @player.errors, status: :unprocessable_entity }
       end
     end
+  end
+  
+  # GET /players/refresh
+  def refresh
+	@cgids = refresh_player_params{:cgids}.split(',')
+	@players = @cgids.map { |id| Player.find_by cgid: id }
+	ResultRefreshJob.perform_later(@players)
+	render :index
   end
 
   # DELETE /players/1
@@ -100,5 +108,8 @@ class PlayersController < ApplicationController
     end
     def save_player_params
       params.permit(:cgid, :pseudo, :rank, :level)
+    end
+    def refresh_player_params
+      params.require(:cgids)
     end
 end
