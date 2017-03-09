@@ -67,7 +67,7 @@ class PuzzlesController < ApplicationController
 	@results = Player.all.map { |p| [p.pseudo , api.puzzle_player_langages(@puzzle,p)] }.to_h
   end
 
-  # POST /puzzles/1/import
+  # GET /puzzles/1/import
   def import
 	api = CodingameApi.new
 	response = api.puzzle_leaderboard @puzzle

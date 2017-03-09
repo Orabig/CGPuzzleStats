@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 	  get 'seed'
 	end
 	member do
-	  post 'import'
+	  get 'import'
 	  get 'results' # Temporaire : affiche le resultat pour tous les players connus 
 	end
   end
