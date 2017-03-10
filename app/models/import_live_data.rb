@@ -19,12 +19,9 @@ class ImportLiveData
 			end
 		end
 	end
-  end
-
-  def refresh_players (players)
-	for player in players
-		refresh_player player
-	end
+	# TODO : refresh des infos du player (rank)
+	player.refresh_pending = false
+	player.save
   end
 
 end

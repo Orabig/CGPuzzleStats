@@ -1,56 +1,280 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Puzzles</h1>
-
-
 
 <%
+
+    cssColors = [ 'red', 'green', 'orange', 'purple', 'cyan', 'white', 'black' ]
+	
 	if @pids
 %>
-<pre>@pids=<%= @pids %></pre>
-<pre>@results=<%= @results %></pre>
-<pre>@languages=<%= @languages %></pre>
-<pre>@solvedLangs=<%= @solvedLangs %></pre>
+<script>
+// waitingDialog.show('Custom message'); (from https://github.com/ehpc/bootstrap-waitingfor)
+!function(e,d){"use strict";"function"==typeof define&&define.amd?define(["jquery"],function(a){return e.waitingDialog=d(a)}):e.waitingDialog=e.waitingDialog||d(e.jQuery)}(this,function(e){"use strict";function d(d){return d&&d.remove(),e('<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;"><div class="modal-dialog modal-m"><div class="modal-content"><div class="modal-header" style="display: none;"></div><div class="modal-body"><div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div></div></div></div></div>')}var a,o;return{show:function(n,i){"undefined"==typeof i&&(i={}),"undefined"==typeof n&&(n="Loading"),o=e.extend({headerText:"",headerSize:3,headerClass:"",dialogSize:"m",progressType:"",contentElement:"p",contentClass:"content",onHide:null,onShow:null},i);var s,t;a=d(a),a.find(".modal-dialog").attr("class","modal-dialog").addClass("modal-"+o.dialogSize),a.find(".progress-bar").attr("class","progress-bar"),o.progressType&&a.find(".progress-bar").addClass("progress-bar-"+o.progressType),s=e("<h"+o.headerSize+" />"),s.css({margin:0}),o.headerClass&&s.addClass(o.headerClass),t=e("<"+o.contentElement+" />"),o.contentClass&&t.addClass(o.contentClass),o.headerText===!1?(t.html(n),a.find(".modal-body").prepend(t)):o.headerText?(s.html(o.headerText),a.find(".modal-header").html(s).show(),t.html(n),a.find(".modal-body").prepend(t)):(s.html(n),a.find(".modal-header").html(s).show()),"function"==typeof o.onHide&&a.off("hidden.bs.modal").on("hidden.bs.modal",function(){o.onHide.call(a)}),"function"==typeof o.onShow&&a.off("shown.bs.modal").on("shown.bs.modal",function(){o.onShow.call(a)}),a.modal()},hide:function(){"undefined"!=typeof a&&a.modal("hide")},message:function(e){return"undefined"!=typeof a?"undefined"!=typeof e?a.find(".modal-header>h"+o.headerSize).html(e):a.find(".modal-header>h"+o.headerSize).html():void 0}}});
+</script>
+<script>
+	
+	function setLevel(level) {
+		var newUrl = $.query.set("level", level);
+		location.href=newUrl;
+		
+	}
+	function setAdd() {
+		var newUrl = $.query.set("add", 1);
+		location.href=newUrl;
+		
+	}
+	function setSearch() {
+		var newUrl = $.query
+			.set("search", $('input:first').val());
+		location.href=newUrl;
+		
+	}
+	function setPage(page) {
+		var newUrl = $.query.set("p", page);
+		location.href=newUrl;
+	}
+	function searchPlayer() {
+		event.preventDefault() 
+		$("#addPlayerModal").modal('hide');
+		var pseudo = $("#search-player").val();
+		$("#search-player").val('');
+		waitingDialog.show('Searching...');
+		$.ajax({
+			url: "/players/search.json",
+			dataType: 'json',
+			data: {
+				query: pseudo
+			},
+			success: function(data) { 
+				waitingDialog.hide();
+				showFoundPlayers(data);
+			}
+		});
+		return false;
+	}
+	var globalList;
+	function showFoundPlayers(list) {
+		console.log(list);
+		globalList=list;
+		$("#foundPlayersModal").modal('show');
+		$("#playersList").html('');
+		$.each(list, function (i,item) {
+			console.log(item);
+			$('<div class="player" onClick="appendPlayer('+ item.cgid +')"><div class="rank">#'+item.rank + '</div>'+ item.pseudo + '</div>').appendTo("#playersList");
+		});
+	}
+	function appendPlayer(pid) {
+		$("#foundPlayersModal").modal('hide');
+		var oldPid = $.query.get("pid");
+		var newPid = ($.query.get("pid")+","+pid)
+			.replace(/^,/,'');
+		var newUrl = $.query
+			.set("pid", newPid )
+			.remove("search")
+			.remove("add");
+		location.href=newUrl;		
+	}
+	function removePlayer(pid) {
+		var oldPid = $.query.get("pid");
+		var re = ',?'+pid+',?';
+		var newPid = oldPid.replace(new RegExp(re,'g'),",,")
+			.replace(/,+/g,',').replace(/^,|,$/g,'');
+		var newUrl = $.query
+			.set("pid",newPid);
+		location.href=newUrl;		
+	}
+	</script>
+	
+<div id="levels" class="btn-toolbar" role="toolbar">
+		<div class="btn-group" role="group">
+			<a id="easy"   type="button" class="btn btn-default">Easy</a>
+			<a id="medium" type="button" class="btn btn-default">Medium</a>
+			<a id="hard"   type="button" class="btn btn-default">Hard</a>
+			<a id="expert" type="button" class="btn btn-default">Expert</a>
+		</div>
+		<div class="btn-group" role="group">
+			<a id="optim"    type="button" class="btn btn-default">Optimisation</a>
+			<a id="codegolf" type="button" class="btn btn-default">Code golf</a>
+		</div>
+<!--
+		<div class="btn-group" role="group">
+			<a id="community" type="button" class="btn btn-default">Community</a>
+		</div>
+-->
 
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th>Title</th>
+</div><div id="legends">
+	<%
+				colorIdx=0
+				for player in @players
+	%>
+	<span class="legend-<%= cssColors[colorIdx] %> legend-player"><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
+	<%
+				colorIdx += 1
+				end
+	%>
+	<button type="button" class="btn icon-btn btn-default" data-toggle="modal" data-target="#addPlayerModal">
+		<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
+		Add Player
+    </button>
+	
+	<!-- Modal dialog "Add Player" -->
+	<div id="addPlayerModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+		<form class="form-inline" role="form" onSubmit="searchPlayer()">           
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Search player</h4>
+		  </div>
+		  <div class="modal-body col-lg-12">
+                <input type="text" class="form-control input-lg" id="search-player" placeholder="Pseudo">
+		  </div>
+		  <div class="modal-footer">
+			<button type="submit" class="btn btn-default">Search</button>
+		  </div>
+		</form>
+		</div>
+	  </div>
+	</div>
+
+	<!-- Modal dialog "Found Players" -->
+	<div id="foundPlayersModal" class="modal fade" role="dialog">
+	  <div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Found players</h4>
+		  </div>
+		  <div class="modal-body col-lg-12">
+                <div>Click on the player to add it :</div>
+				<div id="playersList"></div>
+		  </div>
+		  <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+</div><table class="main-table table table-striped table-header-rotated">
+	<thead><tr>
+		<th class="table-header color-legend" colspan="2">
+		<span class="day-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-day"></span><small>Today</small></span>
+		<span class="week-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-week"></span><small>Last week</small></span>
+		<span class="month-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress"></span><small>Last month</small></span>
+		</th>
+		
 	  <% for lang in @languages %>
-	  <th><%= lang.name %></th>
+	  <th class="rotate-45"><div><span><%= lang.name %></span></div></th>
 	  <% end %>
-    </tr>
-  </thead>
-  <tbody>
+
+		</tr></thead>
+		
+	<tbody>
     <% for puzzle in @puzzles %>
-      <tr>
-		<td>
+		<tr>
+		<th class="percent" width="50px">
 		  <%  # Partie gauche du tableau : liste des players (indicateurs)
+			colorIdx=0
 			 for pid in @pids
-		  %>
-			<%= pid %>
-		  <% end %>
-		</td>
-        <td><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>"><%= puzzle.title %></a></td>
-		  <% for lang in @languages %>
-		  <td>
-			  <% for pid in @pids 
-					key = "#{pid}:#{puzzle.id}:#{lang.id}"
-					if @results.key?( key )
 				%>
-				<%= pid %>
-				<%
-				    end   # if
-				 end # for pid
-			  %>
-		  </td>
+				<span class="touched glyphicon glyphicon-ok-sign <%= cssColors[colorIdx] %> " data-toggle="tooltip" title="Solved 2 months ago" x="<%= pid %>" ></span>
+				<% 
+		     colorIdx += 1
+			 end %>
+		</th>
+		<th class="row-header"><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>" target="_new"><%= puzzle.title %></a></th>
+		  <% for lang in @languages %>
+			<td>
+				  <%
+					colorIdx=0
+					for pid in @pids 
+						key = "#{pid}:#{puzzle.id}:#{lang.id}"
+						if @results.key?( key )
+					%><span class="glyphicon glyphicon-ok <%= cssColors[colorIdx] %>"></span><%
+						end   # if
+						colorIdx += 1
+					 end # for pid
+				  %>
+			</td>
 		  <% end # for lang
 		  %>
 	  </tr>
 	<% end %>
   </tbody>
 </table>
+	
+	</div>
+</div>
+
+
+<script>
+
+	$('#levels a').on('click', function(event) {
+		event.preventDefault();
+		var level = event.target.id;
+		setLevel(level);
+		});
+		
+	if ($.query.get("level")) {
+		$('#levels #'+$.query.get("level")).addClass('active');
+	}
+
+	$('.pagination li a').on('click', function(event) {
+		event.preventDefault();
+		var page = event.target.parentElement.id;
+		setPage(page);
+		});
+		
+	$('#add-player').on('click',  function(event) {
+		setAdd();
+		});
+		
+	$('#search').submit(function(event) {
+		event.preventDefault();
+		setSearch();
+		});
+		
+	$('.search-player-result').on('click', function(event) {
+		event.preventDefault();
+		var pid = $(event.target).attr('pid');
+		appendPlayer(pid);
+		});
+		
+	$('.remove-player').on('click', function(event) {
+		event.preventDefault();
+		var pid = $(this).attr('pid');
+		removePlayer(pid);
+		});
+		
+	$('[data-toggle="tooltip"]').tooltip();
+	
+	// Renvoie une fonction de callback qui agrandit le glyphicon correspondant au selector .new-progress{sel}
+	function getScaleCallback(sel,scale) {
+		return function(event) {
+			$('.new-progress'+sel).css('transform', 'scale('+scale+')');
+		};
+	}
+	
+	$('.month-legend').hover(getScaleCallback('',1.5),getScaleCallback('',1.0));
+	$('.week-legend').hover(getScaleCallback('-week',1.5),getScaleCallback('-week',1.0));
+	$('.day-legend').hover(getScaleCallback('-day',1.5),getScaleCallback('-day',1.0));
+	
+	// Renvoie une fonction de callback pour la couleur donnee
+	function getMasqueCallback(color) {
+		return function(event) {
+			$("tr:not(:has(.table-header)):has(.touched."+color+" , .table-header) *").toggleClass("montre");
+			$("tr:not(:has(.touched."+color+" , .table-header)) *").toggleClass("masque");
+		};
+	}
+	
+	var players = <%= raw cssColors.to_json %>;
+	players.forEach(function(item,index) { $('.legend-'+item).hover(getMasqueCallback(item)); });
+//	$('.legend-purple').hover(getMasqueCallback('purple'));
+	
+</script>
 
 <%
 	else
@@ -90,11 +314,12 @@
     <% end %>
   </tbody>
 </table>
-<%
-	end
-%>
 
 <br>
 
 <%= link_to 'New Puzzle', new_puzzle_path %> <br>
 <%= link_to_if @puzzles.empty?, 'Seed puzzles', seed_puzzles_path %>
+
+<%
+	end
+%>

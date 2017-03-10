@@ -1,0 +1,286 @@
+#title {
+	float:left;
+}
+#title h3 {
+	color:#337ab7;
+	margin-top:10px;
+	margin-bottom:5px;
+}
+
+#links {
+	margin-left: 32px;
+	float:right;
+}
+
+#levels {
+	float:right;
+}
+#levels .btn-group{
+	padding-left: 32px;
+}
+#levels .btn {
+	padding: 1px 24px;
+}
+
+
+#legends {
+	clear:left;
+	padding:5px;
+}
+
+.legend-grey {
+  background: #888;
+  color: #FFF;
+}
+.legend-white {
+  border: solid 1px #000;
+}
+.white {
+  border: solid 1px #000;
+}
+
+.green {
+  padding:2px;
+  border-radius:2px;
+  background: #3F6B3F;
+  color: #FFF;
+}
+.legend-green {
+  background: #3F6B3F;
+  color: #FFF;
+}
+.half.green {
+  color: #3F6B3F;
+  background: none;
+}
+
+.red {
+  padding:2px;
+  border-radius:2px;
+  background: #E22F32;
+  color: #FFF;
+}
+.legend-red {
+  padding:2px;
+  background: #E22F32;
+  color: #FFF;
+}
+
+.orange {
+  padding:2px;
+  border-radius:2px;
+  background: #FFA221;
+}
+.legend-orange {
+  padding:2px;
+  background: #FFA221;
+}
+
+.cyan {
+  padding:2px;
+  border-radius:2px;
+  background: #afdeec;
+}
+.legend-cyan {
+  padding:2px;
+  background: #afdeec;
+}
+
+.purple {
+  padding:2px;
+  border-radius:2px;
+  background: #7810A8;
+  color: #FFF;
+}
+.legend-purple {
+  background: #7810A8;
+  color: #FFF;
+}
+
+.legend-player {
+	margin:1px;
+	padding:5px 16px;
+	font-weight:bold;
+	border-radius:6px;
+}
+.player {
+	margin:8px;
+}
+
+#addPlayerModal input#search-player {
+	width:100%;
+}
+
+#playersList .player {
+	cursor: pointer; cursor: hand;
+	float:left;
+	border-radius: 9px;
+    padding: 2px;
+    background: #639fea;
+    border: 1px;
+    width: 160px;
+	text-align: center;
+}
+#playersList .player:hover{
+    background: #92bdf5
+}
+#playersList .player  .rank {
+	float:left;
+    background: #fff;
+    font-size: x-small;
+    border-radius: 6px;
+	margin: 3px;
+    padding: 0 2px
+}
+
+#add-player {
+	margin-left:32px;
+	height:28px;
+}
+#add-player .btn-glyphicon {
+    padding:4px;
+    margin-right:4px;
+}
+#add-player.icon-btn {
+    padding: 1px 5px 3px 2px;
+    border-radius:50px;
+	margin-top: -1px;
+}
+
+#search {
+	margin-top:32px;
+}
+
+.color-legend small {
+	padding: 0 25px 0 5px;
+}
+.table-header-rotated th.row-header{
+  width: auto;
+}
+
+.hover-legend {
+	padding:4px;
+	border:1px dashed black;
+	background: #EEE;
+}
+
+.table-header-rotated td{
+  width: 40px;
+  border-top: 1px solid #dddddd;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.table-header-rotated th.rotate-45{
+  height: 60px;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  position: relative;
+  vertical-align: bottom;
+  padding: 0;
+  font-size: 12px;
+  line-height: 0.8;
+}
+
+.table-header-rotated th.rotate-45 > div{
+  position: relative;
+  top: 0px;
+  left: 30px; /* 80 * tan(45) / 2 = 40 where 80 is the height on the cell and 45 is the transform angle*/
+  height: 100%;
+  -ms-transform:skew(-45deg,0deg);
+  -moz-transform:skew(-45deg,0deg);
+  -webkit-transform:skew(-45deg,0deg);
+  -o-transform:skew(-45deg,0deg);
+  transform:skew(-45deg,0deg);
+  overflow: hidden;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+}
+
+.table-header-rotated th.rotate-45 span {
+  -ms-transform:skew(45deg,0deg) rotate(315deg);
+  -moz-transform:skew(45deg,0deg) rotate(315deg);
+  -webkit-transform:skew(45deg,0deg) rotate(315deg);
+  -o-transform:skew(45deg,0deg) rotate(315deg);
+  transform:skew(45deg,0deg) rotate(315deg);
+  position: absolute;
+  bottom: 30px; /* 40 cos(45) = 28 with an additional 2px margin*/
+  left: -25px; /*Because it looked good, but there is probably a mathematical link here as well*/
+  display: inline-block;
+  // width: 100%;
+  width: 85px; /* 80 / cos(45) - 40 cos (45) = 85 where 80 is the height of the cell, 40 the width of the cell and 45 the transform angle*/
+  text-align: left;
+  // white-space: nowrap; /*whether to display in one line or not*/
+}
+
+.score {
+	display: inline-block;
+    min-width: 32px;
+    height: 18px;
+    font-size: 11px;
+    margin: 1px 0;
+    border-radius: 9px;
+}
+
+.main-table {
+    position: relative;
+   /* top: -48px;        NO MARCHE PAS : EMPECHE LE CLICK SUR LES BOUTONS EASY/MEDIUM/... */
+}
+.btn-round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.btn-round.btn-xs {
+    width: 24px;
+    height: 24px;
+}
+
+.remove-player {
+	opacity: 0.3;
+	position:relative;
+	top:-14px;
+	left:-15px;
+}
+.remove-player:hover {
+	opacity: 1.0;	
+}
+th.percent .glyphicon-remove-circle {
+	opacity: 0.1;
+}
+th.percent .glyphicon {
+	margin: 0 1px;
+}
+th.percent {
+	padding-right:0 !important;
+}
+.new-progress-day {
+	border-bottom: 3px solid #4F4;
+	border-top: 3px solid #4F4;
+}
+.new-progress-week {
+	border-bottom: 3px solid #88F;
+	border-top: 3px solid #88F;
+}
+.new-progress {
+	border-bottom: 3px solid #F33;
+	border-top: 3px solid #F33;
+}
+th.percent .glyphicon-unchecked {
+    padding: 1px 1px 2px 2px;
+}
+
+.choose_level {
+	padding-left: 380px;
+}
+
+.masque {
+	opacity:0.25;
+}
+.montre {
+	font-weight:bolder;
+}

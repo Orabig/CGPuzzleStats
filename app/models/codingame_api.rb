@@ -4,6 +4,12 @@ class CodingameApi
   
   base_uri "https://www.codingame.com/services"
   
+  # Cherche le/les codingamer par pseudo
+  def player_search (pseudo)
+    request=[ 1, {'keyword' => pseudo}, '', true, 'global' ]
+	self.class.post '/LeaderboardsRemoteService/getGlobalLeaderboard',:body => request.to_s
+  end
+  
   # Charge le leaderboard d'un puzzle. Ne fonctionne que pour les puzzle qui on un champ leaderboardId !!
   def puzzle_leaderboard (puzzle)
     request = [ puzzle.leaderboardId,'','global' ]

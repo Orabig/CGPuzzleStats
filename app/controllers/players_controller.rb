@@ -24,8 +24,8 @@ class PlayersController < ApplicationController
   # GET /search
   def search
     query = params[:query]
-	request = '[1,{"keyword":"' + query + '"},"",true,"global"]'
-	response = HTTParty.post('https://www.codingame.com/services/LeaderboardsRemoteService/getGlobalLeaderboard',:body => request)
+	api = CodingameApi.new
+	response = api.player_search( query )
 	if response.message=="OK"
 		 result = JSON.parse( response.body )
 		 @players = result['success']['users']
@@ -82,7 +82,18 @@ class PlayersController < ApplicationController
   def refresh
 	@cgids = refresh_player_params{:cgids}.split(',')
 	@players = @cgids.map { |id| Player.find_by cgid: id }
-	ResultRefreshJob.perform_later(@players)
+	@refresh_count = 0;
+	@refresh_pending = 0;
+	for player in @players			
+		@refresh_pending += 1
+		# Verification de l'état du joueur
+		if player.needsRefresh
+			player.refresh_pending = true	
+			player.save
+			@refresh_count += 1
+			ResultRefreshJob.perform_later(player)
+		end
+	end
 	render :index
   end
 
