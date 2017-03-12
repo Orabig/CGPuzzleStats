@@ -1,1 +1,2 @@
-json.array! @players, partial: 'players/player', as: :player
+json.array! @players
+#json.array! @players, partial: 'players/player', as: :player

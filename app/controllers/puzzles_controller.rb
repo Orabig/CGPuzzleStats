@@ -15,6 +15,12 @@ class PuzzlesController < ApplicationController
 		for pid in @pids
 			player = Player.find_by(cgid: pid)
 			# player n'est pas NIL, car le pid vient d'une recherche qui doit avoir sauvé le player en base
+			player.last_displayed = Time.now
+			if player.mustRefresh
+				player.refresh_pending = true	
+				ResultRefreshJob.perform_later(player)
+			end
+			player.save!
 			@players.push (player)
 			@results.push( Result.where(player: player).joins(:puzzle).where("puzzles.level = ?", params[:level]) )
 		end

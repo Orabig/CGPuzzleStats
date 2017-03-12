@@ -25,10 +25,16 @@ class PlayersController < ApplicationController
   def search
     query = params[:query]
 	api = CodingameApi.new
-	response = api.player_search( query )
+	response = api.player_search( query )	
 	if response.message=="OK"
 		 result = JSON.parse( response.body )
 		 @players = result['success']['users']
+		 # Traduction des champs
+		 @players = @players.map {|p| { cgid: p["codingamer"]["userId"], rank: p["rank"], pseudo: p["pseudo"], level: p["codingamer"]["level"] } }
+		 # Pre-chargement des joueurs en base
+		 for player in @players
+			Player.create_with(rank: player[:rank], level: player[:level]).find_or_create_by(cgid: player[:cgid], pseudo: player[:pseudo])
+		 end
 	else
 		@players = [ "CG API Error" ]
 	end
@@ -82,6 +88,7 @@ class PlayersController < ApplicationController
   def refresh
 	@cgids = refresh_player_params{:cgids}.split(',')
 	@players = @cgids.map { |id| Player.find_by cgid: id }
+	@changedPlayers = Array.new
 	@refresh_count = 0;
 	@refresh_pending = 0;
 	for player in @players			
@@ -93,7 +100,9 @@ class PlayersController < ApplicationController
 			@refresh_count += 1
 			ResultRefreshJob.perform_later(player)
 		end
+		@changedPlayers.push player
 	end
+	@players = @changedPlayers
 	render :index
   end
 

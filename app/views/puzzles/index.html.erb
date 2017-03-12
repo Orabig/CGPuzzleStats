@@ -1,11 +1,16 @@
 <p id="notice"><%= notice %></p>
-
+<% if @debug %>
+<pre><%= @debug %></pre>
+<pre><%= @players %></pre>
+<% end %>
 
 <%
 
     cssColors = [ 'red', 'green', 'orange', 'purple', 'cyan', 'white', 'black' ]
 	
 	if @pids
+	
+		hasOnePlayerPending = @players.select {|p| p.refresh_pending}.any?
 %>
 <script>
 // waitingDialog.show('Custom message'); (from https://github.com/ehpc/bootstrap-waitingfor)
@@ -27,7 +32,6 @@
 		var newUrl = $.query
 			.set("search", $('input:first').val());
 		location.href=newUrl;
-		
 	}
 	function setPage(page) {
 		var newUrl = $.query.set("p", page);
@@ -52,10 +56,21 @@
 		});
 		return false;
 	}
-	var globalList;
+	function refresh() {
+		var pids = $.query.get("pid");
+		console.log("call de /players/refresh.json");
+		$.ajax({
+			url: "/players/refresh.json",
+			dataType: 'json',
+			data: {
+				cgids: pids
+			},
+			success: function(data) { 
+				console.log(data);
+			}
+		});
+	}
 	function showFoundPlayers(list) {
-		console.log(list);
-		globalList=list;
 		$("#foundPlayersModal").modal('show');
 		$("#playersList").html('');
 		$.each(list, function (i,item) {
@@ -85,6 +100,16 @@
 	}
 	</script>
 	
+	<%
+	
+	if hasOnePlayerPending
+		%><div id="refreshPending">Pending refresh</div><%
+	else
+		%><div id="doRefresh" type="button" class="btn btn-default">Refresh</div><%
+	end
+	
+	%>
+	
 <div id="levels" class="btn-toolbar" role="toolbar">
 		<div class="btn-group" role="group">
 			<a id="easy"   type="button" class="btn btn-default">Easy</a>
@@ -112,7 +137,7 @@
 				colorIdx += 1
 				end
 	%>
-	<button type="button" class="btn icon-btn btn-default" data-toggle="modal" data-target="#addPlayerModal">
+	<button id="addPlayer" type="button" class="btn icon-btn btn-default" data-toggle="modal" data-target="#addPlayerModal">
 		<span class="glyphicon btn-glyphicon glyphicon-plus img-circle text-success"></span>
 		Add Player
     </button>
@@ -161,9 +186,9 @@
 </div><table class="main-table table table-striped table-header-rotated">
 	<thead><tr>
 		<th class="table-header color-legend" colspan="2">
-		<span class="day-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-day"></span><small>Today</small></span>
-		<span class="week-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-week"></span><small>Last week</small></span>
-		<span class="month-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress"></span><small>Last month</small></span>
+		<div class="day-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-day"></span><small>Today</small></div>
+		<div class="week-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-week"></span><small>Last week</small></div>
+		<div class="month-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress"></span><small>Last month</small></div>
 		</th>
 		
 	  <% for lang in @languages %>
@@ -175,16 +200,14 @@
 	<tbody>
     <% for puzzle in @puzzles %>
 		<tr>
-		<th class="percent" width="50px">
-		  <%  # Partie gauche du tableau : liste des players (indicateurs)
+		<th class="percent" width="50px"><%
+		# Partie gauche du tableau : liste des players (indicateurs)
 			colorIdx=0
 			 for pid in @pids
-				%>
-				<span class="touched glyphicon glyphicon-ok-sign <%= cssColors[colorIdx] %> " data-toggle="tooltip" title="Solved 2 months ago" x="<%= pid %>" ></span>
-				<% 
+				%><span class="touched glyphicon glyphicon-ok-sign <%= cssColors[colorIdx] %> " data-toggle="tooltip" title="Solved 2 months ago" x="<%= pid %>" ></span><% 
 		     colorIdx += 1
-			 end %>
-		</th>
+			 end 
+		%></th>
 		<th class="row-header"><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>" target="_new"><%= puzzle.title %></a></th>
 		  <% for lang in @languages %>
 			<td>
@@ -230,6 +253,10 @@
 		
 	$('#add-player').on('click',  function(event) {
 		setAdd();
+		});
+		
+	$('#doRefresh').on('click',  function(event) {
+		refresh();
 		});
 		
 	$('#search').submit(function(event) {

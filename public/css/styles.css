@@ -13,7 +13,8 @@
 }
 
 #levels {
-	float:right;
+    float: right;
+    padding: 0 0 8px;
 }
 #levels .btn-group{
 	padding-left: 32px;
@@ -22,10 +23,14 @@
 	padding: 1px 24px;
 }
 
+#addPlayer  {
+    height: 22px;
+    padding: 0 6px;
+}
 
 #legends {
 	clear:left;
-	padding:5px;
+	padding:0 5px;
 }
 
 .legend-grey {
@@ -107,6 +112,13 @@
 	margin:8px;
 }
 
+#doRefresh, #refreshPending {
+	position:absolute;
+	top:8px;
+	left:360px;
+	border-radius:36px;
+}
+
 #addPlayerModal input#search-player {
 	width:100%;
 }
@@ -159,7 +171,9 @@
 }
 
 .hover-legend {
-	padding:4px;
+    display: inline-block;
+	margin:1px;
+	padding:2px;
 	border:1px dashed black;
 	background: #EEE;
 }
