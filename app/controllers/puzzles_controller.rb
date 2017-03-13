@@ -19,7 +19,8 @@ class PuzzlesController < ApplicationController
 			# player n'est pas NIL, car le pid vient d'une recherche qui doit avoir sauvé le player en base
 			player.last_displayed = Time.now
 			if player.mustRefresh
-				player.refresh_pending = true	
+				player.refresh_pending = true
+				player.save				
 				ResultRefreshJob.perform_later(player)
 			end
 			player.save!
