@@ -33,7 +33,7 @@ class PuzzlesController < ApplicationController
 			.group_by {|r| "#{r.player.cgid}:#{r.puzzle_id}:#{r.language_id}"}
 		@languages = Language.all.to_a.keep_if{|l| @solvedLangs.include?(l.id)}
 		@achpl = AchievementPlayer.where(player_id: playerIds)
-		# @debug=1
+		#@debug=1
 	end
   end
 

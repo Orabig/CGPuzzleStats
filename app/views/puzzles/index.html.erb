@@ -161,10 +161,10 @@
 	<%
 				colorIdx=0
 				for player in @players
-	%>
-	<span class="legend-<%= cssColors[colorIdx] %> legend-player"><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
-	<%
-				colorIdx += 1
+		%>
+					<span class="legend-<%= cssColors[colorIdx] %> legend-player cgid-<%= player.cgid %>"><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
+		<%
+					colorIdx += 1
 				end
 	%>
 	<button id="addPlayer" type="button" class="btn icon-btn btn-default" data-toggle="modal" data-target="#addPlayerModal">
@@ -216,9 +216,11 @@
 </div><table class="main-table table table-striped table-header-rotated">
 	<thead><tr>
 		<th class="table-header color-legend" colspan="2">
+		<!--
 		<div class="day-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-day"></span><small>Today</small></div>
 		<div class="week-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress-week"></span><small>Last week</small></div>
 		<div class="month-legend hover-legend"><span class="glyphicon glyphicon-ok-sign legend-grey new-progress"></span><small>Last month</small></div>
+		-->
 		</th>
 		
 	  <% for lang in @languages %>
@@ -230,14 +232,33 @@
 	<tbody>
     <% for puzzle in @puzzles %>
 		<tr>
+		
 		<th class="percent" width="50px"><%
 		# Partie gauche du tableau : liste des players (indicateurs)
 			colorIdx=0
-			 for pid in @pids
-				%><span class="touched glyphicon glyphicon-ok-sign <%= cssColors[colorIdx] %> " data-toggle="tooltip" title="Solved 2 months ago" x="<%= pid %>" ></span><% 
+			 for player in @players
+			 
+				# All the achievements for this player and this puzzle
+				achs = @achpl.joins(:achievement).where(player_id: player.id , achievements: { puzzle_id: puzzle.id})
+				# Retourne 100 ou 50 ou 0 selon le meilleur achievement trouvé
+				best = [0, achs.map{|ap| ap.achievement.text_id.gsub!(/.*_(\d+)P_.*/,'\1').to_i}].flatten.max
+				
+				glyphClass = case best
+					when 100
+						"glyphicon-ok-sign"
+					when 50
+						"glyphicon-unchecked half"
+					else
+						"glyphicon-remove-circle"
+					end
+					
+				tooltip = "#{ player.pseudo } : #{best}%"
+				
+				%><span class="touched glyphicon <%= glyphClass %> <%= cssColors[colorIdx] %> cgid-<%= player.cgid %>" data-toggle="tooltip" title="<%= tooltip %>" x="<%= player.id %>" ></span><% 
 		     colorIdx += 1
 			 end 
 		%></th>
+		
 		<th class="row-header"><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>" target="_new"><%= puzzle.title %></a></th>
 		  <% for lang in @languages %>
 			<td>

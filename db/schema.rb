@@ -10,18 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170313152435) do
+ActiveRecord::Schema.define(version: 20170313202429) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "achievement_players", force: :cascade do |t|
-    t.integer  "achievement_id"
-    t.integer  "player_id"
+    t.integer  "achievement_id",  null: false
+    t.integer  "player_id",       null: false
     t.integer  "progress"
     t.datetime "completion_time"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["achievement_id", "player_id"], name: "index_achievement_players_on_achievement_id_and_player_id", unique: true, using: :btree
   end
 
   create_table "achievements", force: :cascade do |t|
@@ -40,12 +41,14 @@ ActiveRecord::Schema.define(version: 20170313152435) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.string   "unit"
+    t.index ["puzzle_id"], name: "index_achievements_on_puzzle_id", using: :btree
   end
 
   create_table "languages", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_languages_on_name", unique: true, using: :btree
   end
 
   create_table "players", force: :cascade do |t|
@@ -58,6 +61,7 @@ ActiveRecord::Schema.define(version: 20170313152435) do
     t.boolean  "refresh_pending"
     t.datetime "last_displayed"
     t.datetime "last_refreshed"
+    t.index ["cgid"], name: "index_players_on_cgid", unique: true, using: :btree
   end
 
   create_table "posts", force: :cascade do |t|
@@ -80,16 +84,18 @@ ActiveRecord::Schema.define(version: 20170313152435) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.string   "leaderboardId"
+    t.index ["cgid"], name: "index_puzzles_on_cgid", unique: true, using: :btree
   end
 
   create_table "results", force: :cascade do |t|
-    t.integer  "player_id"
-    t.integer  "language_id"
-    t.integer  "puzzle_id"
+    t.integer  "player_id",     null: false
+    t.integer  "language_id",   null: false
+    t.integer  "puzzle_id",     null: false
     t.boolean  "is_last"
     t.boolean  "is_onboarding"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["language_id", "player_id", "puzzle_id"], name: "index_results_on_language_id_and_player_id_and_puzzle_id", unique: true, using: :btree
   end
 
 end
