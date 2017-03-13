@@ -20,6 +20,7 @@
 !function(e,d){"use strict";"function"==typeof define&&define.amd?define(["jquery"],function(a){return e.waitingDialog=d(a)}):e.waitingDialog=e.waitingDialog||d(e.jQuery)}(this,function(e){"use strict";function d(d){return d&&d.remove(),e('<div class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true" style="padding-top:15%; overflow-y:visible;"><div class="modal-dialog modal-m"><div class="modal-content"><div class="modal-header" style="display: none;"></div><div class="modal-body"><div class="progress progress-striped active" style="margin-bottom:0;"><div class="progress-bar" style="width: 100%"></div></div></div></div></div></div>')}var a,o;return{show:function(n,i){"undefined"==typeof i&&(i={}),"undefined"==typeof n&&(n="Loading"),o=e.extend({headerText:"",headerSize:3,headerClass:"",dialogSize:"m",progressType:"",contentElement:"p",contentClass:"content",onHide:null,onShow:null},i);var s,t;a=d(a),a.find(".modal-dialog").attr("class","modal-dialog").addClass("modal-"+o.dialogSize),a.find(".progress-bar").attr("class","progress-bar"),o.progressType&&a.find(".progress-bar").addClass("progress-bar-"+o.progressType),s=e("<h"+o.headerSize+" />"),s.css({margin:0}),o.headerClass&&s.addClass(o.headerClass),t=e("<"+o.contentElement+" />"),o.contentClass&&t.addClass(o.contentClass),o.headerText===!1?(t.html(n),a.find(".modal-body").prepend(t)):o.headerText?(s.html(o.headerText),a.find(".modal-header").html(s).show(),t.html(n),a.find(".modal-body").prepend(t)):(s.html(n),a.find(".modal-header").html(s).show()),"function"==typeof o.onHide&&a.off("hidden.bs.modal").on("hidden.bs.modal",function(){o.onHide.call(a)}),"function"==typeof o.onShow&&a.off("shown.bs.modal").on("shown.bs.modal",function(){o.onShow.call(a)}),a.modal()},hide:function(){"undefined"!=typeof a&&a.modal("hide")},message:function(e){return"undefined"!=typeof a?"undefined"!=typeof e?a.find(".modal-header>h"+o.headerSize).html(e):a.find(".modal-header>h"+o.headerSize).html():void 0}}});
 </script>
 <script>
+    var isRefreshing = false;
 	
 	function setLevel(level) {
 		var newUrl = $.query.set("level", level);
@@ -75,14 +76,24 @@
 			}
 		});
 	}
+	// This is called on callback from isRefreshPending API : data contains infos about which player is currently refreshing (if any)
 	function checkRefreshPendingResult(data) {
 		if (data.refresh_pending==0){
-			console.log("ZERO");
-		}else {
-			console.log("pending="+data.refresh_pending);
+			// Button REFRESH should be enabled
+			// $('#doRefresh').removeClass('pending');
+			$('#doRefresh').removeClass('disabled');
+			if (isRefreshing) {
+				// Some user WAS refreshing, and it's done, so refresh the page now
+				location.reload();
+			}
+		} else {
+			isRefreshing = true;
+			$('#doRefresh').addClass('pending').addClass('disabled');
+			
 		}
 	}
 	function refresh() {
+		$('#doRefresh').addClass('pending').addClass('disabled');
 		var pids = $.query.get("pid");
 		$.ajax({
 			url: "/players/refresh.json",
@@ -91,7 +102,9 @@
 				cgids: pids
 			},
 			success: function(data) { 
-				console.log(data);
+				// not really necessary, but will make the page refresh to let think the user somethink worked, even if there's nothing to do
+				// TODO : maybe I should FORCE a refresh here if the server told there was no need for it (less than 10mns old data)
+				isRefreshing = true;
 			}
 		});
 	}
@@ -123,17 +136,9 @@
 			.set("pid",newPid);
 		location.href=newUrl;		
 	}
-	</script>
+</script>
 	
-	<%
-	
-	if hasSomePlayerPending
-		%><div id="refreshPending">Pending refresh</div><%
-	else
-		%><div id="doRefresh" type="button" class="btn btn-default">Refresh</div><%
-	end
-	
-	%>
+<div id="doRefresh" type="button" class="btn btn-default"><span>Refresh</span></div>
 	
 <div id="levels" class="btn-toolbar" role="toolbar">
 		<div class="btn-group" role="group">

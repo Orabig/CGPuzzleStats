@@ -10,6 +10,7 @@ class ImportLiveData
 	refresh_player_achievements(api,player)
 	# TODO : refresh des infos du player (rank)
 	player.refresh_pending = false
+	player.last_refreshed = Time.now
 	player.save
   end
 
