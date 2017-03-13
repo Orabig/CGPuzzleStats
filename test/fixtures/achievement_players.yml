@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  achievement_id: 
+  player_id: 
+  progress: 1
+  completion_time: 2017-03-12 21:53:44
+
+two:
+  achievement_id: 
+  player_id: 
+  progress: 1
+  completion_time: 2017-03-12 21:53:44

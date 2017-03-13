@@ -1,5 +1,6 @@
 class Player < ApplicationRecord
   has_many :results, dependent: :destroy
+  has_many :achievement_player, dependent: :destroy
   
   def needsRefresh
     # Explication : le champ last_displayed est mis à jour quand un joueur est demandé à l'affichage

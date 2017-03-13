@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  textId: MyString
+  puzzle_id: 
+  title: MyString
+  description: MyText
+  points: 1
+  image_binary_id: 1
+  category: MyString
+  group: MyString
+  level: MyString
+  unlock_text: MyString
+  weight: 1
+  progress_max: 1
+
+two:
+  textId: MyString
+  puzzle_id: 
+  title: MyString
+  description: MyText
+  points: 1
+  image_binary_id: 1
+  category: MyString
+  group: MyString
+  level: MyString
+  unlock_text: MyString
+  weight: 1
+  progress_max: 1

@@ -10,10 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170310124207) do
+ActiveRecord::Schema.define(version: 20170313005002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "achievement_players", force: :cascade do |t|
+    t.integer  "achievement_id"
+    t.integer  "player_id"
+    t.integer  "progress"
+    t.datetime "completion_time"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "achievements", force: :cascade do |t|
+    t.string   "text_id"
+    t.integer  "puzzle_id"
+    t.string   "title"
+    t.text     "description"
+    t.integer  "points"
+    t.bigint   "image_binary_id"
+    t.string   "category"
+    t.string   "group"
+    t.string   "level"
+    t.string   "unlock_text"
+    t.integer  "weight"
+    t.integer  "progress_max"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "unit"
+  end
 
   create_table "languages", force: :cascade do |t|
     t.string   "name"
