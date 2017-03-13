@@ -12,8 +12,10 @@ class PuzzlesController < ApplicationController
 		@pids = params[:pid].split(',')
 		@results = Array.new
 		@players = Array.new
+		playerIds = Array.new # id's (not cgid's) of Players
 		for pid in @pids
 			player = Player.find_by(cgid: pid)
+			playerIds.push player.id
 			# player n'est pas NIL, car le pid vient d'une recherche qui doit avoir sauvé le player en base
 			player.last_displayed = Time.now
 			if player.mustRefresh
@@ -29,6 +31,8 @@ class PuzzlesController < ApplicationController
 			.flatten
 			.group_by {|r| "#{r.player.cgid}:#{r.puzzle_id}:#{r.language_id}"}
 		@languages = Language.all.to_a.keep_if{|l| @solvedLangs.include?(l.id)}
+		@achpl = AchievementPlayer.where(player_id: playerIds)
+		# @debug=1
 	end
   end
 

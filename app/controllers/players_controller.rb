@@ -84,26 +84,37 @@ class PlayersController < ApplicationController
     end
   end
   
+  # GET /players/isRefreshPending
+  def isRefreshPending
+	@cgids = refresh_player_params{:cgids}.split(',')
+	@players = @cgids.map { |id| Player.find_by cgid: id }
+	@refresh_pending = 0;
+	for player in @players
+		if player.refresh_pending
+			@refresh_pending += 1
+		end
+	end
+	render :refresh
+  end
+  
   # GET /players/refresh
   def refresh
 	@cgids = refresh_player_params{:cgids}.split(',')
 	@players = @cgids.map { |id| Player.find_by cgid: id }
-	@changedPlayers = Array.new
-	@refresh_count = 0;
 	@refresh_pending = 0;
-	for player in @players			
-		@refresh_pending += 1
-		# Verification de l'état du joueur
-		if player.needsRefresh
-			player.refresh_pending = true	
-			player.save
-			@refresh_count += 1
-			ResultRefreshJob.perform_later(player)
+	for player in @players
+		if player.refresh_pending
+			@refresh_pending += 1
+		else
+			# Verification de l'état du joueur
+			if player.needsRefresh
+				player.refresh_pending = true	
+				player.save
+				@refresh_pending += 1
+				ResultRefreshJob.perform_later(player)
+			end
 		end
-		@changedPlayers.push player
 	end
-	@players = @changedPlayers
-	render :index
   end
 
   # DELETE /players/1

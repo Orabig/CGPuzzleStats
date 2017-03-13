@@ -2,6 +2,7 @@
 <% if @debug %>
 <pre><%= @debug %></pre>
 <pre><%= @players %></pre>
+<pre><%= @achpl.inspect %></pre>
 <% end %>
 
 <%
@@ -10,7 +11,9 @@
 	
 	if @pids
 	
-		hasOnePlayerPending = @players.select {|p| p.refresh_pending}.any?
+	# Indicateur : au moins un des joueurs est en train de refresh
+	# TODO : remove
+	hasSomePlayerPending = @players.select {|p| p.refresh_pending}.any?
 %>
 <script>
 // waitingDialog.show('Custom message'); (from https://github.com/ehpc/bootstrap-waitingfor)
@@ -56,9 +59,31 @@
 		});
 		return false;
 	}
+	function checkRefreshPending() {
+		var pids = $.query.get("pid");
+		$.ajax({
+			url: "/players/isRefreshPending.json",
+			dataType: 'json',
+			data: {
+				cgids: pids
+			},
+			success: function(data) { 
+				checkRefreshPendingResult(data);
+				setTimeout(function () {
+					checkRefreshPending();
+				}, 6000);	
+			}
+		});
+	}
+	function checkRefreshPendingResult(data) {
+		if (data.refresh_pending==0){
+			console.log("ZERO");
+		}else {
+			console.log("pending="+data.refresh_pending);
+		}
+	}
 	function refresh() {
 		var pids = $.query.get("pid");
-		console.log("call de /players/refresh.json");
 		$.ajax({
 			url: "/players/refresh.json",
 			dataType: 'json',
@@ -102,7 +127,7 @@
 	
 	<%
 	
-	if hasOnePlayerPending
+	if hasSomePlayerPending
 		%><div id="refreshPending">Pending refresh</div><%
 	else
 		%><div id="doRefresh" type="button" class="btn btn-default">Refresh</div><%
@@ -300,6 +325,11 @@
 	var players = <%= raw cssColors.to_json %>;
 	players.forEach(function(item,index) { $('.legend-'+item).hover(getMasqueCallback(item)); });
 //	$('.legend-purple').hover(getMasqueCallback('purple'));
+
+	// appelle l'API 'isRefreshPending' à intervalles réguliers
+	$( function() {
+		checkRefreshPending();		
+	});
 	
 </script>
 
