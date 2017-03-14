@@ -8,7 +8,7 @@ class CreatePuzzles < ActiveRecord::Migration[5.0]
       t.string :level
       t.string :prettyId
       t.integer :solvedCount
-      t.string :type
+      t.string :puzzleType
       t.integer :achievementCount
 
       t.timestamps
