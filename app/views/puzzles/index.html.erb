@@ -78,6 +78,15 @@
 	}
 	// This is called on callback from isRefreshPending API : data contains infos about which player is currently refreshing (if any)
 	function checkRefreshPendingResult(data) {
+		players = data.players;
+		for(index = 0, len = players.length; index < len; ++index) {
+			player=players[index];
+			if (player.refresh_pending) {
+				$(".legend-player.cgid-" + player.cgid + " .refresh").addClass("pending");
+			}else{
+				$(".legend-player.cgid-" + player.cgid + " .refresh").removeClass("pending");
+			}
+		}
 		if (data.refresh_pending==0){
 			// Button REFRESH should be enabled
 			// $('#doRefresh').removeClass('pending');
@@ -162,7 +171,7 @@
 				colorIdx=0
 				for player in @players
 		%>
-					<span class="legend-<%= cssColors[colorIdx] %> legend-player cgid-<%= player.cgid %>"><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
+					<span class="legend-<%= cssColors[colorIdx] %> legend-player cgid-<%= player.cgid %>"><div class="refresh"><span></span></div><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
 		<%
 					colorIdx += 1
 				end
