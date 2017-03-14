@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'puzzles#index'
+  
   resources :puzzles do
     collection do
 	  get 'seed'
