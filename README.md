@@ -1,24 +1,11 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+How to launch for first time :
 
-Things you may want to cover:
+Run into production :
 
-* Ruby version
+./run-server.sh
+./rake.sh db:create RAILS_ENV=production
+./rails.sh db:migrate RAILS_ENV=production
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Access to web site, then click on "Seed puzzles"
