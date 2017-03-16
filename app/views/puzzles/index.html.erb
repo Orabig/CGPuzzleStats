@@ -36,7 +36,7 @@
 			location.href=newUrl;
 		}
 		function searchPlayer() {
-			event.preventDefault() 
+			// event.preventDefault() 
 			$("#addPlayerModal").modal('hide');
 			var pseudo = $("#search-player").val();
 			$("#search-player").val('');
@@ -186,7 +186,7 @@
 		  <div class="modal-dialog">
 			<!-- Modal content-->
 			<div class="modal-content">
-			<form class="form-inline" role="form" onSubmit="searchPlayer()">           
+			<form class="form-inline" role="form" onSubmit="return searchPlayer()">           
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<h4 class="modal-title">Search player</h4>
