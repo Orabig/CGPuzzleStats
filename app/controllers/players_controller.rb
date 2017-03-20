@@ -123,6 +123,7 @@ class PlayersController < ApplicationController
 	@players = @cgids.map { |id| Player.find_by cgid: id }
 	@scores = Hash.new
 	@langs = Hash.new
+	@achievements = Hash.new
 	for player in @players
 		score = Hash.new
 		for level in [ 'easy', 'medium', 'hard', 'expert' ]
@@ -130,7 +131,10 @@ class PlayersController < ApplicationController
 		end
 		score [ :score ] = score [ :easy ] + 20 * (score [ :medium ] + 20 * (score [ :hard ] + 20 * (score [ :expert ]))) 
 		@scores[ player.id ] = score
-		@langs[ player.id ] = player.results.joins(:language).group("languages.name").order("count_all DESC").count
+		@langs[ player.id ] = player.results.joins(:language).group("languages.name").order("count_all DESC").count		
+	end
+	for lang in Language.all
+		@achievements[ lang.name ] = Achievement.where(language: lang.id)
 	end
   end
 

@@ -341,12 +341,16 @@ table#ranking  td{
 table#ranking  .r{
     text-align: center;
 }
-table#ranking  .r div{
+#ranking  .r div, 
+#languages .r div{
     width:64px;
     height:64px;
     background-position: center !important;
     background-repeat: no-repeat !important;
     margin: auto;
+}
+#languages .r {
+	text-align:center;
 }
 table#ranking th {
 	vertical-align:bottom;
@@ -366,4 +370,23 @@ table#ranking th.hard div {
 table#ranking th.expert div {
 	background: #f96249;
     background-image: url(https://static.codingame.com/servlet/fileservlet?id=1925067246288);
+}
+.level-BRONZE {
+	background: #b6a28b;
+}
+.level-SILVER {
+	background: #849aa4;
+}
+.level-GOLD {
+	background: #f4ae3d;
+}
+.level-PLATINUM {
+	background: #f96249;
+}
+table#ranking td.r {
+	font-size:120%;
+	font-weight:bold;
+}
+.table th.titre{
+	border:0px;
 }

@@ -2,13 +2,16 @@
 <table id="ranking" class="table table-striped">
   <thead>
     <tr>
+	  <th class="titre" colspan="3">100% complete solo puzzles</th>
+      <th rowspan="2" class="r expert"><div></div>Expert</th>
+      <th rowspan="2" class="r hard"><div></div>Hard</th>
+      <th rowspan="2" class="r medium"><div></div>Medium</th>
+      <th rowspan="2" class="r easy"><div></div>Easy</th>
+	</tr>
+    <tr>
       <th>CG rank</th>
       <th>Player</th>
       <th>Level</th>
-      <th class="r easy"><div></div>Easy</th>
-      <th class="r medium"><div></div>Medium</th>
-      <th class="r hard"><div></div>Hard</th>
-      <th class="r expert"><div></div>Expert</th>
     </tr>
   </thead>
 
@@ -18,11 +21,59 @@
         <td>#<%= player.rank %></td>
         <td><%= player.pseudo %></td>
         <td>Lvl <%= player.level %></td>
-        <td class="r easy"><%= @scores[player.id][:easy] %></td>
-        <td class="r medium"><%= @scores[player.id][:medium] %></td>
-        <td class="r hard"><%= @scores[player.id][:hard] %></td>
-        <td class="r expert"><%= @scores[player.id][:expert] %></td>
+        <td class="r expert"><%= posOrString( @scores[player.id][:expert] , '-' )  %></td>
+        <td class="r hard"><%= posOrString( @scores[player.id][:hard] , '-' )  %></td>
+        <td class="r medium"><%= posOrString( @scores[player.id][:medium] , '-' )  %></td>
+        <td class="r easy"><%= posOrString( @scores[player.id][:easy] , '-' ) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+
+
+
+
+<table id="languages" class="table table-striped">
+  <thead>
+    <tr>
+	  <th class="titre">Prefered languages</th>
+      <th rowspan="2" class="r"><div></div>#1</th>
+      <th rowspan="2" class="r"><div></div>#2</th>
+      <th rowspan="2" class="r"><div></div>#3</th>
+      <th rowspan="2" class="r"><div></div>#4</th>
+      <th rowspan="2" class="r"><div></div>#5</th>
+	</tr>
+    <tr>
+      <th>Player</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @players.sort_by{ |p| @scores[p.id][:score] }.reverse.each do |player| %>
+      <tr>
+        <td><%= player.pseudo %></td>
+		<%
+		for i in 0..4
+			# Most used language
+			lang=@langs[player.id].keys.at( i )
+			if not lang.nil?
+				# How many solution in this language
+				count=@langs[player.id][lang]
+				# The best achievement for this
+				ach=getBestAchievement(@achievements[lang], count)
+				%>
+				<td class="r"><div 
+					class="level-<%= ach.level %>" 
+					style="background-image: url(<%= staticFileFromId( ach.image_binary_id ) %>);" 
+					data-toggle="tooltip" title="<%= ach.description %>"></div>
+				<%= count %> puzzles</td>
+				<%
+			end
+		end
+		%>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
