@@ -11,7 +11,7 @@ class ImportLiveData
 	# TODO : refresh des infos du player (rank)
 	player.refresh_pending = false
 	player.last_refreshed = Time.now
-	player.save
+	player.save!
   end
 
   def refresh_player_puzzles_langages (api,player,puzzles)
@@ -26,7 +26,7 @@ class ImportLiveData
 				r = Result.find_or_create_by( language: lang, puzzle: puzzle, player: player )				
 				r.is_last=isLast
 				r.is_onboarding=isOnboarding
-				r.save
+				r.save!
 			end
 		end
 	end
@@ -48,7 +48,7 @@ class ImportLiveData
 		result['group'] = result.delete 'groupId'
 		# puzzleId => puzzle_id, ...
 		result = result.transform_keys{ |key| key.to_s.underscore }
-		achievement.update(result);
+		achievement.update!(result);
 
 		# Persist AchievementPlayer
 		if progress > 0
@@ -57,6 +57,24 @@ class ImportLiveData
 		end
 	end
 	"ok"
+  end
+  
+  def refresh_language_achievement
+	connection = ActiveRecord::Base.connection
+    for lang in Language.all
+    	if lang.name.nil?
+    		lang.delete
+    	else
+    		name = lang.name.downcase
+    		if name == 'vb.net'
+    			name = 'vbnet'
+    		end
+    		if name == 'swift3'
+    			name = 'swift'
+    		end
+			connection.execute "UPDATE achievements SET language_id = #{lang.id} WHERE achievements.group = 'coder-#{name}';"
+    	end
+    end
   end
   
 end

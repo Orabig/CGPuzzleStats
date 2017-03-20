@@ -1,7 +1,7 @@
 class Achievement < ApplicationRecord
   has_many :achievement_player, dependent: :destroy
-  belongs_to :puzzle
-  belongs_to :language
+  belongs_to :puzzle, optional: true
+  belongs_to :language, optional: true
   
   # This comes from a CG API flaw, where puzzle_id always equals to 0...
   # We should then look for textId=~/PZ_(\d+)P_P$puzzleId$/

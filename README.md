@@ -9,3 +9,8 @@ Run into production :
 ./rails.sh db:migrate RAILS_ENV=production
 
 Access to web site, then click on "Seed puzzles"
+
+RAILS_ENV=production ./rails.sh console
+> ImportLiveData.new.refresh_language_achievement
+
+
