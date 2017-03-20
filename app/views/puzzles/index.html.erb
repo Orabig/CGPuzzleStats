@@ -163,7 +163,11 @@
 	-->
 
 	</div>
-	<a href="/players/ranking?cgids=<%= @pids.join(',') %>" class="btn rank"><span class="glyphicon glyphicon-th-list"/></a>
+	<a 
+		href="/players/ranking?cgids=<%= @pids.join(',') %>" 
+		class="btn rank"><span class="glyphicon glyphicon-th-list"
+		data-toggle="tooltip" title="Rankings"
+		/></a>
 	<div id="legends"><%
 					colorIdx=0
 					for player in @players
