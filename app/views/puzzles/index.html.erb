@@ -162,12 +162,12 @@
 			</div>
 	-->
 
-	</div><div id="legends">
-		<%
+	</div>
+	<a href="/players/ranking?cgids=<%= @pids.join(',') %>" class="btn rank"><span class="glyphicon glyphicon-th-list"/></a>
+	<div id="legends"><%
 					colorIdx=0
 					for player in @players
-			%>
-						<span class="legend-<%= cssColors[colorIdx] %> legend-player cgid-<%= player.cgid %>"><div class="refresh"><span></span></div><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
+			%><span class="legend-<%= cssColors[colorIdx] %> legend-player cgid-<%= player.cgid %>"><div class="refresh"><span></span></div><%= player.pseudo %></span><button pid="<%= player.cgid %>" type="button" class="btn btn-danger btn-xs btn-round remove-player"><span class="glyphicon glyphicon-remove"></span></button>
 			<%
 						colorIdx += 1
 					end

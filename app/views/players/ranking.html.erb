@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+<table id="ranking" class="table table-striped">
+  <thead>
+    <tr>
+      <th>CG rank</th>
+      <th>Player</th>
+      <th>Level</th>
+      <th class="r easy"><div></div>Easy</th>
+      <th class="r medium"><div></div>Medium</th>
+      <th class="r hard"><div></div>Hard</th>
+      <th class="r expert"><div></div>Expert</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @players.sort_by{ |p| @scores[p.id][:score] }.reverse.each do |player| %>
+      <tr>
+        <td>#<%= player.rank %></td>
+        <td><%= player.pseudo %></td>
+        <td>Lvl <%= player.level %></td>
+        <td class="r easy"><%= @scores[player.id][:easy] %></td>
+        <td class="r medium"><%= @scores[player.id][:medium] %></td>
+        <td class="r hard"><%= @scores[player.id][:hard] %></td>
+        <td class="r expert"><%= @scores[player.id][:expert] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
