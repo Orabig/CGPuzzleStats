@@ -116,6 +116,23 @@ class PlayersController < ApplicationController
 		end
 	end
   end
+  
+  # GET /players/ranking
+  def ranking
+	@cgids = refresh_player_params{:cgids}.split(',')
+	@players = @cgids.map { |id| Player.find_by cgid: id }
+	@scores = Hash.new
+	@langs = Hash.new
+	for player in @players
+		score = Hash.new
+		for level in [ 'easy', 'medium', 'hard', 'expert' ]
+			score[ level.to_sym ] = Puzzle.joins(:results).where(results: {player_id: player.id}, level: level).distinct.count
+		end
+		score [ :score ] = score [ :easy ] + 20 * (score [ :medium ] + 20 * (score [ :hard ] + 20 * (score [ :expert ]))) 
+		@scores[ player.id ] = score
+		@langs[ player.id ] = player.results.joins(:language).group("languages.name").order("count_all DESC").count
+	end
+  end
 
   # DELETE /players/1
   # DELETE /players/1.json

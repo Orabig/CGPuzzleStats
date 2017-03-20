@@ -29,10 +29,11 @@
 }
 
 #legends {
-	clear:left;
 	padding:0 5px;
 }
-
+.rank.btn{
+	float:left;
+}
 .legend-grey {
   background: #888;
   color: #FFF;
@@ -106,6 +107,7 @@
 	margin:1px;
 	padding:5px 16px;
 	font-weight:bold;
+	display: inline-block;
 	border-radius:6px;
 }
 .player {
@@ -329,4 +331,39 @@ th.percent .glyphicon-unchecked {
     border-top: 4px solid #3498db; /* Blue */
     width: 12px;
     height: 12px;
+}
+table#ranking  th{
+    padding: 10px;
+}
+table#ranking  td{
+    padding: 10px;
+}
+table#ranking  .r{
+    text-align: center;
+}
+table#ranking  .r div{
+    width:64px;
+    height:64px;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    margin: auto;
+}
+table#ranking th {
+	vertical-align:bottom;
+}
+table#ranking th.easy div {
+	background: #b6a28b;
+    background-image: url(https://static.codingame.com/servlet/fileservlet?id=1925053079108);
+}
+table#ranking th.medium div {
+	background: #849aa4;
+    background-image: url(https://static.codingame.com/servlet/fileservlet?id=1925126663265);
+}
+table#ranking th.hard div {
+	background: #f4ae3d;
+    background-image: url(https://static.codingame.com/servlet/fileservlet?id=1925105695233);
+}
+table#ranking th.expert div {
+	background: #f96249;
+    background-image: url(https://static.codingame.com/servlet/fileservlet?id=1925067246288);
 }

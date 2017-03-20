@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 	  get 'save'
 	  get 'refresh'
 	  get 'isRefreshPending'
+	  get 'ranking'
 	end
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
