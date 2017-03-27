@@ -92,6 +92,8 @@ class PlayersController < ApplicationController
 	for player in @players
 		if player.refresh_pending
 			@refresh_pending += 1
+		else
+			check_refresh_state player
 		end
 	end
 	render :refresh
@@ -107,11 +109,9 @@ class PlayersController < ApplicationController
 			@refresh_pending += 1
 		else
 			# Verification de l'état du joueur
-			if player.needsRefresh
-				player.refresh_pending = true	
-				player.save
+			if player.needsRefresh 2
+				player.refresh
 				@refresh_pending += 1
-				ResultRefreshJob.perform_later(player)
 			end
 		end
 	end
@@ -164,4 +164,17 @@ class PlayersController < ApplicationController
     def refresh_player_params
       params.require(:cgids)
     end
+
+	# Checks the state of a player.
+	# - if it's reloading for too much time, then cancel this state
+	# - if the player is not up to date, refresh it
+	def check_refresh_state(player)
+		if player.isRefreshTimeout
+			player.refresh_pending=false
+			player.save
+		end
+		if player.needsRefresh (60 * 12)
+			player.refresh
+		end
+	end
 end
