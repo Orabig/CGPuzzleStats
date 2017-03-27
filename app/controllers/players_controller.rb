@@ -109,7 +109,7 @@ class PlayersController < ApplicationController
 			@refresh_pending += 1
 		else
 			# Verification de l'état du joueur
-			if player.needsRefresh 2
+			if player.needsRefresh 2 # minutes min between refreshs
 				player.refresh
 				@refresh_pending += 1
 			end

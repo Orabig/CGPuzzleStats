@@ -2,7 +2,7 @@ class ImportLiveData
   
   # Charge tous les résultats de tous les puzzles pour un joueur et stocke en base
   def refresh_player (player)
-    puzzles = Puzzle.all.without_community
+    puzzles = Puzzle.all
 	api = CodingameApi.new
 	# Charge la matrice puzzle/languages pour ce joueur
 	refresh_player_puzzles_langages(api,player,puzzles)
