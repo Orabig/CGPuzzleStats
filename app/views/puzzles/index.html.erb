@@ -156,11 +156,11 @@
 				<a id="optim"    type="button" class="btn btn-default">Optimisation</a>
 				<a id="codegolf" type="button" class="btn btn-default">Code golf</a>
 			</div>
-	<!--
+
 			<div class="btn-group" role="group">
 				<a id="community" type="button" class="btn btn-default">Community</a>
 			</div>
-	-->
+
 
 	</div>
 	<a 
@@ -253,6 +253,11 @@ if @pids
 			
 			<th class="percent" width="50px"><%
 			# Partie gauche du tableau : liste des players (indicateurs)
+			
+			# On affiche cette colonne uniquement si on est sur des niveaux de puzzle AVEC achievement
+			
+			if @level_has_achievements
+			
 				colorIdx=0
 				 for player in @players
 				 
@@ -275,6 +280,8 @@ if @pids
 					%><span class="touched glyphicon <%= glyphClass %> <%= cssColors[colorIdx] %> cgid-<%= player.cgid %>" data-toggle="tooltip" title="<%= tooltip %>" x="<%= player.id %>" ></span><% 
 				 colorIdx += 1
 				 end 
+			end
+			
 			%></th>
 			
 			<th class="row-header"><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>" target="_new"><%= puzzle.title %></a></th>

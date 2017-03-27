@@ -4,10 +4,12 @@ class PuzzlesController < ApplicationController
   # GET /puzzles
   # GET /puzzles.json
   def index
-    @puzzles = Puzzle.all.without_community
-	if params[:level]
-	  @puzzles = @puzzles.by_level(params[:level])
+    @puzzles = Puzzle.all
+	level = params[:level] || 'easy'
+	if level=='easy' or level=='medium' or level=='hard' or level=='expert'
+		@level_has_achievements = true
 	end
+	@puzzles = @puzzles.by_level(level)
 	if params[:pid]
 		@pids = params[:pid].split(',')
 		@results = Array.new
@@ -25,7 +27,7 @@ class PuzzlesController < ApplicationController
 			end
 			player.save!
 			@players.push (player)
-			@results.push( Result.where(player: player).joins(:puzzle).where("puzzles.level = ?", params[:level]) )
+			@results.push( Result.where(player: player).joins(:puzzle).where("puzzles.level = ?", level) )
 		end
 		@solvedLangs = @results.flatten.map{|r| r.language_id}.uniq
 		@results = @results
@@ -42,18 +44,20 @@ class PuzzlesController < ApplicationController
     text = File.read(Rails.root.join('app','models','seed','findGamePuzzleProgress.json'))
 	json = JSON.parse(text)
 	json["success"].each do |p|
-	  new_puzzle = Puzzle.new
-	  new_puzzle.cgid=p["id"]
-	  new_puzzle.title=p["title"]
-	  new_puzzle.description=p["description"]
-	  new_puzzle.detailsPageUrl=p["detailsPageUrl"]
-	  new_puzzle.level=p["level"]
-	  new_puzzle.prettyId=p["prettyId"]
-	  new_puzzle.solvedCount=p["solvedCount"]
-	  new_puzzle.puzzleType=p["type"]
-	  new_puzzle.leaderboardId=p["puzzleLeaderboardId"]
-	  new_puzzle.achievementCount=p["achievementCount"]
-	  new_puzzle.save
+	  if not Puzzle.exists?( :cgid => p["id"] )
+		  new_puzzle = Puzzle.new
+		  new_puzzle.cgid=p["id"]
+		  new_puzzle.title=p["title"]
+		  new_puzzle.description=p["description"]
+		  new_puzzle.detailsPageUrl=p["detailsPageUrl"]
+		  new_puzzle.level=p["level"]
+		  new_puzzle.prettyId=p["prettyId"]
+		  new_puzzle.solvedCount=p["solvedCount"]
+		  new_puzzle.puzzleType=p["type"]
+		  new_puzzle.leaderboardId=p["puzzleLeaderboardId"]
+		  new_puzzle.achievementCount=p["achievementCount"]
+		  new_puzzle.save
+	  end
 	end
 	redirect_to puzzles_url
   end
