@@ -286,13 +286,17 @@ if @pids
 			
 			<th class="row-header"><a href="http://www.codingame.com<%= puzzle.detailsPageUrl %>" target="_new"><%= puzzle.title %></a></th>
 			  <% for lang in @languages %>
-				<td>
+				<td> 
 					  <%
 						colorIdx=0
 						for pid in @pids 
 							key = "#{pid}:#{puzzle.id}:#{lang.id}"
 							if @results.key?( key )
-						%><span class="glyphicon glyphicon-ok <%= cssColors[colorIdx] %>"></span><%
+						%><span class="glyphicon glyphicon-ok <%= cssColors[colorIdx] %>" data-toggle="tooltip" title="<%= 
+								@players.find{ |p| p[:cgid] == pid.to_i }[:pseudo] 
+										%> / <%= 
+								lang.name 
+										%>"></span><%
 							end   # if
 							colorIdx += 1
 						 end # for pid
