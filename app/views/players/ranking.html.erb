@@ -62,6 +62,7 @@
 				count=@langs[player.id][lang]
 				# The best achievement for this
 				ach=getBestAchievement(@achievements[lang], count)
+				if not ach.nil?
 				%>
 				<td class="r"><div 
 					class="level-<%= ach.level %>" 
@@ -69,6 +70,7 @@
 					data-toggle="tooltip" title="<%= ach.description %>"></div>
 				<%= count %> puzzles</td>
 				<%
+				end
 			end
 		end
 		%>
